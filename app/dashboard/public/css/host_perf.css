@@ -1,0 +1,53 @@
+#span_dropdown{
+	cursor: pointer;
+	text-decoration: none;
+	background-color: #e02222;
+	padding: 11px;
+}
+#span_dropdown i{
+	color: #fff;
+}
+#span_dropdown i.icon-angle-down{
+	font-size: 16px;
+}
+#time_range_selected{
+	color: #fff;
+	cursor: pointer;
+	padding: 0 8px;
+	font-size: 16px;
+}
+#span_menu{
+	top: 129%;
+}
+#span_menu:after{
+	position: absolute;
+	top: -6px;
+	right: 10px;
+	display: inline-block;
+	border-right: 6px solid transparent;
+	border-bottom: 6px solid #fff;
+	border-left: 6px solid transparent;
+	content: '';
+}
+#span_menu li{
+	border: 1px solid #f5f5f5;
+	background: #f5f5f5;
+	margin: 8px;
+	font-size: 13px;
+}
+#span_menu a{
+	color: #08c;
+}
+#span_menu a:hover{
+	background-color: #08c;
+	color: #fff;
+	border: 1px solid #08c;
+}
+div.graph{
+	position: absolute;
+	top: 23px;
+	width: 441px;
+	height: 92px;
+	left: 44px;
+	cursor: e-resize;
+}

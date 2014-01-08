@@ -1,0 +1,22 @@
+mongodb:
+  server:   localhost
+  database:    monitor
+  connectionString:       # alternative to setting server, database, user and password separately
+
+server:
+  port:		8085
+
+nagira:
+  baseUrl:  http://10.109.253.102:4567
+
+pnp:
+  apiUrl: http://10.109.253.102/pnp4nagios/api
+  imgUrl: http://10.109.253.102/pnp4nagios
+
+action:
+  resize: 调大虚拟机额度
+  migrate: 对虚拟机进行迁移
+  shutdown: 关闭虚拟机
+  restart: 重启虚拟机
+  email: 发送邮件通知
+  sms: 发送短信通知

@@ -1,0 +1,95 @@
+doctype html
+html
+	head
+		meta(charset="utf-8")
+		meta(content="width=device-width, initial-scale=1.0",name="viewport")
+		title= title
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/bootstrap.min.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/bootstrap-responsive.min.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/font-awesome.min.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/style-metro.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/style.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/style-responsive.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/default.css")
+		link(rel="stylesheet", type="text/css", href="/dashboard/css/uniform.default.css")
+		block head_static
+		body.page-header-fixed
+			div.header.navbar.navbar-inverse.navbar-fixed-top
+				div.navbar-inner
+					div.container-fluid
+						a.brand(href="/dashboard")
+							h4	LOGO
+						ul.nav.pull-right
+							li.dropdown
+								a.dropdown-toggle(href="#",data-toggle="dropdown")
+									i.icon-warning-sign
+									span.badge 6
+								ul.dropdown-menu.extended.notification
+									li
+										p You have 6 new notifications
+									li
+										a(href="#")
+											span.label.label-success
+												i.icon-plus
+											| 警告已经增加
+
+			div.page-container
+				div.page-sidebar.nav-collapse.collapse
+					ul.page-sidebar-menu
+						li
+							div.sidebar-toggler.hidden-phone
+						li.start.active
+							a(href="/dashboard")
+								i.icon-home
+								span.title Dashboard
+								span.selected
+						li
+							a(href="javascript:;")
+								i.icon-desktop
+								span.title 物理主机
+								span.arrow
+							ul.sub-menu
+								li
+									a(href="/dashboard/host_static") 服务器配置详情
+									a(href="/dashboard/host_perf") 性能监控详情
+									a(href="/dashboard/host_osservice") openstack服务监控
+						li
+							a(href="javascript:;")
+								i.icon-cloud
+								span.title 虚拟机
+								span.arrow
+							ul.sub-menu
+								li
+									a(href="/dashboard/vm_manage") 查看详情和操作管理
+									a(href="/dashboard/vm_perf") 性能监控详情
+						li
+							a(href="javascript:;")
+								i.icon-bolt
+								span.title 告警
+								span.arrow
+							ul.sub-menu
+								li
+									a 已定义告警
+									a 告警触发记录
+						li
+							a(href="javascript:;")
+								i.icon-cog
+								span.title 配置
+								span.arrow
+							ul.sub-menu
+								li
+									a 调度算法选择
+									a 监控时间段	
+				block content
+			div.footer
+				div.footer-inner  2014 © 交换与智能国家重点实验室
+			script(type="text/javascript", src="/dashboard/js/jquery-1.10.1.min.js")								
+			script(type="text/javascript", src="/dashboard/js/bootstrap.min.js")
+			script(type="text/javascript", src="/dashboard/js/jquery.slimscroll.min.js")
+			script(type="text/javascript", src="/dashboard/js/jquery.uniform.min.js")
+			script(type="text/javascript", src="/dashboard/js/app.js")
+			block body_static
+			script.
+				$(document).ready(function(){
+					App.init();
+				});

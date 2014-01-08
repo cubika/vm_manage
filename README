@@ -1,0 +1,68 @@
+API列表：
+API_PORT=8085
+告警：
+POST:		/alarm/						--->	add()
+PUT:		/alarm/:id 					--->	update(alarm_id)
+DELETE:		/alarm/:id					--->	delete(alarm_id)
+GET:		/alarm/						--->	get(all)
+GET:		/alarm/vm/:id				--->	get(vm_id)
+GET:		/alarm/host/:id 			--->	get(host_id)
+告警历史：		
+POST:		/history/					--->	add()
+GET:		/history/					--->	get(all)
+GET:		/history/warning			--->	get(warning)
+GET:		/history/critical			--->	get(critical)
+GET:		/history/:from/:to			--->	get(time_form,time_to)
+GET:		/history/w/:f/:t 			--->	get(warning,time_from,time_to)
+GET:		/history/c/:f/:t 			--->	get(critical,time_from,time_to)
+主机：	
+GET:		/host/						--->	get(all)
+监控数据：	
+GET:		/monitor/services			--->	get(all_host_services)
+GET:		/monitor/services/:hostid 	--->	get(host_services)
+GET:		/monitor/status				--->	get(all_host_status)
+GET:		/monitor/perf				--->	get(performance_services)
+GET:		/monitor/perf/:hostid 		--->	get(performance_of_hostid)
+GET:		/monitor/openstack			--->	get(openstack_services)
+GET:		/monitor/openstack/:hostid 	--->	get(openstack_service_of_hostid)
+
+MODEL列表：
+主机: host{
+	name:			主机名字
+	os:				操作系统
+	cpu:			cpu详细参数
+	mem:			内存详细参数
+	disk:			磁盘详细参数
+	eth0:			第一块网卡ip
+	eth1:			第二块网卡ip
+}
+虚拟机：vm{
+	id:				openstack vm UUID
+	name:			名字
+	ip:				ip地址
+	host:			所在计算节点
+	owner:			所属者
+	tenant:			租户
+	status:			状态
+	flavor:			额度
+	instance_name:	libvirt中实例名字
+
+}
+告警: alarm{
+	vm:				虚拟机
+	host:			虚拟机所在主机
+	create_time:	创建时间
+	update_time:	更新时间
+	item:			告警指标
+	threshold:		告警阈值
+	action:			采取动作			
+}
+历史：history{
+	level:			级别
+	vm:				告警来自哪一个虚拟机
+	trigger_time:	触发时间
+	info:			详细信息
+}
+
+导入数据命令语法：
+mongoimport -h localhost -d monitor -c host  --type json --file data/host.json --jsonArray

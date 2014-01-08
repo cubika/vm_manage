@@ -1,0 +1,2 @@
+Openstack API调用statusCode不为202时错误信息的展示
+虚拟机基本操作列表action要根据vm状态变化而变化，如Active虚拟机显示pause,Pause虚拟机显示unpause

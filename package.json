@@ -1,0 +1,22 @@
+{
+  "name": "vmManage_v1",
+  "version": "0.1.0",
+  "description": "a monitor and alert system for virtual machines",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "libin",
+  "license": "MIT",
+  "dependencies": {
+    "express": "~3.4.7",
+    "config": "~0.4.33",
+    "js-yaml": "~3.0.1",
+    "jade": "~1.0.2",
+    "async": "~0.2.9",
+    "underscore": "~1.5.2"
+  }
+}

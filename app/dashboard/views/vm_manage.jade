@@ -1,0 +1,118 @@
+extends layout
+
+block head_static
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/select2_metro.css")
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/DT_bootstrap.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title 虚拟机信息查看和管理  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/vm_manage") 虚拟机详情
+				div.row-fluid
+					div.btn-group
+						button.btn.red.dropdown-toggle(data-toggle="dropdown") 基本操作
+							i.icon-angle-down
+						ul.dropdown-menu#basic_op_drop
+							li
+								a(data-action='pause')
+									i.icon-pause
+									| &nbsp;&nbsp;pause/unpause
+							li
+								a(data-action='suspend')
+									i.icon-pause
+									| &nbsp;&nbsp;suspend/resume
+							li
+								a(data-action='sreboot')
+									i.icon-rotate-right
+									| &nbsp;&nbsp;soft reboot
+							li
+								a(data-action='hreboot')
+									i.icon-rotate-left
+									| &nbsp;&nbsp;hard reboot
+							li.divider
+							li
+								a(data-action='resize')
+									i.icon-random
+									| &nbsp;&nbsp;resize
+							li
+								a(data-action='migrate')
+									i.icon-truck
+									| &nbsp;&nbsp;migrate
+							li.divider
+							
+							li
+								a(data-action='terminate')
+									i.icon-trash
+									| &nbsp;&nbsp;terminate
+					div.btn-group
+						button.btn.blue.dropdown-toggle(data-toggle="dropdown") 监控操作
+							i.icon-angle-down
+						ul.dropdown-menu
+							li
+								a
+									i.icon-plus
+									|  加入监控
+							li
+								a
+									i.icon-remove
+									|  解除监控
+					div.btn-group
+						button.btn.green 增加告警
+								
+
+				div.row-fluid.row-space
+					div.span12
+						table.table.table-striped.table-bordered.table-full-width#vm_table
+							thead
+								tr 
+									th ID
+									th 名字
+									th IP地址
+									th 计算节点
+									th 所属者
+									th 额度
+									th 租户
+									th 状态
+									th VNC
+							tbody
+								each vm in vmList
+									tr
+										td.vm_id #{vm.id}
+										td.vm_name #{vm.name}
+										td.vm_ip #{vm.ip}
+										td.vm_host #{vm.host}
+										td.vm_owner #{vm.owner}
+										td.vm_flavor #{vm.flavor}
+										td.vm_tenant #{vm.tenant}
+										td.vm_status #{vm.status}
+										td
+											a(href="/dashboard/vm/action?id=#{vm.id}&action=getConsole", target="_blank")
+												img(src="/dashboard/image/vnc.png", alt="vnc", style="width:30px")
+	div.modal.hide.fade#modal_resize
+		div.modal-header
+			h3 选择resize后的额度
+		div.modal-body
+			select#sel_resize
+				each flavor in flavorList
+					option(value="#{flavor.id}") #{flavor.name}
+		div.modal-footer
+			button.btn.yellow#resizeOK 确定
+			button.btn(data-dismiss="modal") 取消
+				
+
+
+block body_static
+	script(type="text/javascript", src="/dashboard/js/select2.min.js")
+	script(type="text/javascript", src="/dashboard/js/jquery.dataTables.min.js")
+	script(type="text/javascript", src="/dashboard/js/DT_bootstrap.js")
+	script(type="text/javascript", src="/dashboard/js/vm_manage.js")

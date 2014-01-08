@@ -1,0 +1,76 @@
+extends layout
+
+block head_static
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/pricing-tables.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title 服务器配置详情  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/host_static") 主机配置
+
+				
+				each host,index in hosts
+					if index % 3 == 0
+						if index != 0
+							| </div>
+						| <div class='row-fluid'>
+						- var lowerStatus = host.status.toLowerCase()
+						div.span4.pricing.hover-effect(class="#{lowerStatus}")
+							div.pricing-head
+								h3 #{host.name}
+								h4 #{host.status}
+							ul.pricing-content.unstyled
+								li  
+									span.host_item   操作系统： 
+									small #{host.os}
+								li  
+									span.host_item   CPU：  
+									small #{host.cpu}
+								li 
+									span.host_item   内存：  
+									small #{host.mem}
+								li  
+									span.host_item   磁盘:  
+									small #{host.disk}
+								li  
+									span.host_item   eth0:  
+									small #{host.eth0}
+								li  
+									span.host_item   eth1:
+									small #{host.eth1}
+					else
+						- var lowerStatus = host.status.toLowerCase()
+						div.span4.pricing.hover-effect(class="#{lowerStatus}")
+							div.pricing-head
+								h3 #{host.name}
+								h4 #{host.status}
+							ul.pricing-content.unstyled
+								li  
+									span.host_item   操作系统： 
+									small #{host.os}
+								li  
+									span.host_item   CPU：  
+									small #{host.cpu}
+								li 
+									span.host_item   内存：  
+									small #{host.mem}
+								li  
+									span.host_item   磁盘:  
+									small #{host.disk}
+								li  
+									span.host_item   eth0:  
+									small #{host.eth0}
+								li  
+									span.host_item   eth1:
+									small #{host.eth1}
+						

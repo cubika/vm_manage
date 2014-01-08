@@ -1,0 +1,57 @@
+extends layout
+
+block head_static
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/DT_bootstrap.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title Openstack服务监控详情  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/host_osservice") Openstack服务
+
+				div.row-fluid
+					div.span12.text-center
+						h3(style="display:inline") 请选择主机:  
+						select.large.m-wrap#select_host
+							each host in hosts
+								option(value="#{host}") #{host}
+				div.row-fluid.row-space
+					div.span12
+						table.table.table-striped.table-bordered
+							thead
+								tr 
+									th 名称
+									th 状态
+									th 最后更新时间
+									th 详细输出信息
+							tbody
+								each host in hosts
+									each service in services[host]
+										- var last_time = (new Date(service.last_update * 1000)).Format("yyyy年MM月dd日 hh:mm:ss");
+										- var status
+										case service.current_state
+											when "0"
+												- status = "OK"
+											when "1"
+												- status = "WARNING"
+											when "2"
+												- status = "CRITICAL"
+											when "3"
+												- status = "UNKNOWN"
+										tr(class="#{host}")
+											td #{service.service_description}
+											td #{status}
+											td #{last_time}	
+											td #{service.plugin_output}						
+
+block body_static
+	script(type="text/javascript", src="/dashboard/js/host_osservice.js")
