@@ -298,6 +298,32 @@ OSAPI.prototype.compute = function(){
 			});
 			return this;
 		},
+		revertResize: function(serverId,callback){
+			self.sendRequest({
+				data: {
+					"revertResize" : null
+				},
+				method: "POST",
+				path: '/v2/'+self.tenantId+'/servers/'+serverId+'/action',
+				port: opt.compute_port
+			},function(data){
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
+		migrateServer: function(serverId,callback){
+			self.sendRequest({
+				data: {
+					"migrate": null
+				},
+				method: "POST",
+				path: '/v2/'+self.tenantId+'/servers/'+serverId+'/action',
+				port: opt.compute_port
+			},function(data){
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
 		getFlavors: function(callback){
 			self.sendRequest({
 				method: "GET",

@@ -1,6 +1,6 @@
 var oTable;
 
-var tableMan = {
+var Manage = {
     init: function(){
          oTable = $('#vm_table').dataTable( {           
             "aoColumnDefs": [
@@ -40,7 +40,7 @@ var tableMan = {
         $("#basic_op_drop a").on('click',function(){
             var sel_row = self.getSelectedRow(oTable);
             if(!sel_row){
-                self.addWarning();
+                self.addWarning("你必须从表格中选择一个虚拟机条目");
             }else{
                 var id = $(sel_row).find("td.vm_id").text(),
                     status = $(sel_row).find("td.vm_status").text(),
@@ -60,8 +60,15 @@ var tableMan = {
                             console.log(result);
                         });
                     });
-                }else if(action == "migration"){
-
+                }else if(action == "confirmResize" || action == "revertResize"){
+                    if(status != "RESZIE"){
+                        self.addWarning("只有当实例状态为RESIZE时才可以进行此操作");
+                        $("#op_warning").fadeOut(500);
+                    }else{
+                        $.get('/dashboard/vm/action?id='+id+"&action="+action,function(result){
+                            console.log(result);
+                        });
+                    }
                 }else if(action == "terminate"){
                     if(window.confirm("你确定要删除这个实例吗？")){
                         $.get('/dashboard/vm/action?id='+id+"&action="+action,function(result){
@@ -76,8 +83,8 @@ var tableMan = {
             }
         });
     },
-    addWarning: function(){
-        $("<div class='row-fluid' id='op_warning'><div class='alert alert-error'><strong>警告！</strong>你必须从表格中选择一个虚拟机条目</div></div>")
+    addWarning: function(message){
+        $("<div class='row-fluid' id='op_warning'><div class='alert alert-error'><strong>警告！</strong>"+ message +"</div></div>")
             .insertAfter($("div.page-content .container-fluid .row-fluid:eq(0)"));
     },
     getSelectedRow: function(oTableLocal){
@@ -94,4 +101,4 @@ var tableMan = {
     }
 }
 
-tableMan.init();
+Manage.init();

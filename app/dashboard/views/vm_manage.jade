@@ -42,8 +42,16 @@ block content
 							li.divider
 							li
 								a(data-action='resize')
-									i.icon-random
+									i.icon-share
 									| &nbsp;&nbsp;resize
+							li
+								a(data-action='confirmResize')
+									i.icon-unshare
+									| &nbsp;&nbsp;confirmResize			
+							li
+								a(data-action='revertResize')
+									i.icon-random
+									| &nbsp;&nbsp;revertResize						
 							li
 								a(data-action='migrate')
 									i.icon-truck
