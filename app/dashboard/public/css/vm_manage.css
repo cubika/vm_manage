@@ -1,0 +1,19 @@
+tbody{
+	font-family: Georgia, Arial;
+}
+#refresh_table{
+	float: right;
+	margin-right: 25px;
+}
+.vm_id{
+	width: 17%;
+}
+.dropdown-menu a{
+	cursor: pointer;
+}
+#loading-indicator {
+  position: fixed;
+  width: 150px;
+  left: 50%;
+  top: 40%;
+}

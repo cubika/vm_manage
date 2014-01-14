@@ -37,8 +37,9 @@ app.get('/host_perf',host.host_perf);
 app.get('/host_osservice',host.host_osservice);
 app.get('/monitorImg/:url',image.index);
 app.get('/vm_manage',vm.manage);
-app.get('/vm_perf',vm.perf);
+app.get('/vm_perf',host.vm_perf);
 app.get('/vm/action',vm.action);
+app.get('/vm/load',vm.load);
 
 if (!module.parent) {
   app.listen(3000);

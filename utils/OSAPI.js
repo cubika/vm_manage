@@ -324,6 +324,23 @@ OSAPI.prototype.compute = function(){
 			});
 			return this;
 		},
+		liveMigrate: function(serverId,host,callback){
+			self.sendRequest({
+				data: {
+					"os-migrateLive": {
+				        "host": host,
+				        "block_migration": false,
+				        "disk_over_commit": false
+				    }
+				},
+				method: "POST",
+				path: '/v2/'+self.tenantId+'/servers/'+serverId+'/action',
+				port: opt.compute_port
+			},function(data){
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
 		getFlavors: function(callback){
 			self.sendRequest({
 				method: "GET",

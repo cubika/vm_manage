@@ -1,16 +1,26 @@
 
 var OSAPI = require('../../../utils/OSAPI.js'),
 	async = require('async'),
+	ssh = require('../../../utils/SSH.js'),
 	fs = require('fs');
 
 var admin = OSAPI(),
 		auth = admin.authorize(),
 		compute = admin.compute();
 
+var target = {
+  host: '10.109.253.102',
+  port: 22,
+  username: 'root',
+  password: '123456'
+};
+
+//generate Openstack API token
 console.log("start get token ...");
 auth.genToken(function(){
 	console.log("get token done!");
 });
+
 
 function collect_data (data_ready_callback) {
 	var tenantList,serverList,userList,flavorList,
@@ -51,6 +61,7 @@ function collect_data (data_ready_callback) {
 			vm.name = server.name;
 			vm.status = server.status;
 			vm.host = server['OS-EXT-SRV-ATTR:host'];
+			vm.alias = server['OS-EXT-SRV-ATTR:instance_name'];
 			var filterFlavor = flavorList.filter(function(flavor){
 				return flavor.id === server.flavor.id;
 			});
@@ -82,19 +93,19 @@ function collect_data (data_ready_callback) {
 			if(err) console.log(err);
 			else console.log("vmList saved!");
 		});
+		fs.writeFile('data/server_list.json',JSON.stringify(admin.serverList),function(err){
+			if(err) console.log(err);
+			else console.log("serverList saved!");
+		});
 		if(typeof data_ready_callback === 'function')
 			data_ready_callback(vmList);
 	});
 }
 
 exports.manage = function(req,res){
-	collect_data(function(vmList){
-		res.render('vm_manage',{vmList: vmList, flavorList: admin.flavorList});
-	})
-}
-
-exports.perf = function(req,res){
-
+	compute.getFlavors(function(flavorList){
+		res.render('vm_manage',{flavorList: admin.flavorList});
+	});
 }
 
 exports.action = function(req,res){
@@ -159,11 +170,50 @@ exports.action = function(req,res){
 				res.json({"code":statusCode});
 			});
 			break;
+		case 'liveMigrate':
+			if(!req.query.hostId){
+				return res.json({"code":"You must provide target host"});
+			}
+			compute.liveMigrate(id,req.query.hostId,function(statusCode){
+				res.json({"code":statusCode});
+			});
+			break;
 		case 'getConsole':
 			compute.getConsole(id,function(data){
 				var url = data.console.url;
 				res.redirect(url);
 			});
 			break;
+		case 'add':
+			var name = req.query.name,
+				alias = req.query.alias,
+				ip = req.query.ip,
+				server = req.query.server;
+			if(!name || !alias || !ip || !server){
+				return res.json({"data":"No empty parameter allowed!"});
+			}
+			name.replace(/\s+/g,"_");
+			var command = '/home/libin/script/add_vm_monitor.sh '+ name +' '+ alias +' '+ ip +' '+ server;
+			ssh.once(target,command,function(data){
+				res.json({"data":data});
+			});
+			break;
+		case 'remove':
+			var alias = req.query.alias,
+				server = req.query.server;
+			if( !alias || !server){
+				return res.json({"data":"No empty parameter allowed!"});
+			}
+			var command = '/home/libin/script/remove_vm_monitor.sh '+ alias +' '+ server;
+			ssh.once(target,command,function(data){
+				res.json({"data":data});
+			});
+			break;
 	}
+}
+
+exports.load = function(req,res){
+	collect_data(function(vmList){
+		res.json({aaData:vmList});
+	});
 }

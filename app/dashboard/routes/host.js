@@ -14,7 +14,7 @@ exports.host_static = function(req,res,next){
 			});
 		},
 		status: function(callback){
-			http.get('http://localhost:'+config.server.port+'/api/monitor/status',function(response){
+			http.get('http://localhost:'+config.server.port+'/api/monitor/status/all',function(response){
 				callback(null,response);
 			});
 		}
@@ -27,13 +27,9 @@ exports.host_static = function(req,res,next){
 	});
 }
 
-exports.host_perf = function(req,res,next){
-		http.get('http://localhost:'+config.server.port+'/api/monitor/status',function(response){
-			var hosts = [];
-			for(var host in response){
-				if(response[host] == "UP")
-					hosts.push(host);
-			}
+function render(req,res,type){
+	http.get('http://localhost:'+config.server.port+'/api/monitor/status/'+type,function(response){
+			var hosts = response;
 			var current_host = (req.query.host) ? (req.query.host) : hosts[0];
 			var span = (req.query.span) ? (req.query.span) : "4hour";
 			http.get(config.pnp.apiUrl+'/host_'+span+'/'+current_host,function(data){
@@ -56,9 +52,17 @@ exports.host_perf = function(req,res,next){
 					});
 				});
 
-				res.render('host_perf',{hosts: hosts, pnpdata: pnpdata, current_host: current_host});
+				res.render('host_perf',{hosts: hosts, pnpdata: pnpdata, current_host: current_host, type: type});
 			});
 		});	
+}
+
+exports.host_perf = function(req,res){
+	render(req,res,"perf");
+}
+
+exports.vm_perf = function(req,res){
+	render(req,res,"vm");
 }
 
 exports.host_osservice = function(req,res,next){

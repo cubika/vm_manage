@@ -121,7 +121,7 @@ module.exports = function(app){
 		});
 	});
 
-	app.get('/monitor/status',function(req,res){
+	app.get('/monitor/status/all',function(req,res){
 		http.get(config.nagira.baseUrl+"/_status",function(data){
 			var info = {};
 			for(var hostname in data){
@@ -138,6 +138,20 @@ module.exports = function(app){
 						break;
 				}
 			}
+			res.json(info);
+		});
+	});
+
+	app.get('/monitor/status/perf',function(req,res){
+		http.get(config.nagira.baseUrl+"/_objects/hostgroup/perf-servers",function(data){
+			var info = data.members.split(",");
+			res.json(info);
+		});
+	});
+
+	app.get('/monitor/status/vm',function(req,res){
+		http.get(config.nagira.baseUrl+"/_objects/hostgroup/vm_instances",function(data){
+			var info = data.members.split(",");
 			res.json(info);
 		});
 	});

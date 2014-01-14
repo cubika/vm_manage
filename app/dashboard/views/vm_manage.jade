@@ -3,6 +3,7 @@ extends layout
 block head_static
 	link(rel="stylesheet", type="text/css", href="/dashboard/css/select2_metro.css")
 	link(rel="stylesheet", type="text/css", href="/dashboard/css/DT_bootstrap.css")
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/vm_manage.css")
 
 block content
 	div.page-container
@@ -26,36 +27,39 @@ block content
 							li
 								a(data-action='pause')
 									i.icon-pause
-									| &nbsp;&nbsp;pause/unpause
+									| &nbsp;Pause/Unpause
 							li
 								a(data-action='suspend')
 									i.icon-pause
-									| &nbsp;&nbsp;suspend/resume
+									| &nbsp;Suspend/Resume
 							li
 								a(data-action='sreboot')
 									i.icon-rotate-right
-									| &nbsp;&nbsp;soft reboot
+									| &nbsp;Soft Reboot
 							li
 								a(data-action='hreboot')
 									i.icon-rotate-left
-									| &nbsp;&nbsp;hard reboot
+									| &nbsp;Hard Reboot
 							li.divider
 							li
 								a(data-action='resize')
 									i.icon-share
-									| &nbsp;&nbsp;resize
+									| &nbsp;Resize
 							li
 								a(data-action='confirmResize')
-									i.icon-unshare
-									| &nbsp;&nbsp;confirmResize			
+									i.icon-undo
+									| &nbsp;Confirm Resize/Migrate		
 							li
 								a(data-action='revertResize')
 									i.icon-random
-									| &nbsp;&nbsp;revertResize						
+									| &nbsp;Revert Resize/Migrate				
 							li
 								a(data-action='migrate')
 									i.icon-truck
-									| &nbsp;&nbsp;migrate
+									| &nbsp;Migrate
+								a(data-action='liveMigrate')
+									i.icon-ambulance
+									| &nbsp;Live Migrate
 							li.divider
 							
 							li
@@ -65,13 +69,13 @@ block content
 					div.btn-group
 						button.btn.blue.dropdown-toggle(data-toggle="dropdown") 监控操作
 							i.icon-angle-down
-						ul.dropdown-menu
+						ul.dropdown-menu#monitor_op_drop
 							li
-								a
+								a(data-action="add")
 									i.icon-plus
 									|  加入监控
 							li
-								a
+								a(data-action="remove")
 									i.icon-remove
 									|  解除监控
 					div.btn-group
@@ -81,31 +85,31 @@ block content
 				div.row-fluid.row-space
 					div.span12
 						table.table.table-striped.table-bordered.table-full-width#vm_table
-							thead
-								tr 
-									th ID
-									th 名字
-									th IP地址
-									th 计算节点
-									th 所属者
-									th 额度
-									th 租户
-									th 状态
-									th VNC
-							tbody
-								each vm in vmList
-									tr
-										td.vm_id #{vm.id}
-										td.vm_name #{vm.name}
-										td.vm_ip #{vm.ip}
-										td.vm_host #{vm.host}
-										td.vm_owner #{vm.owner}
-										td.vm_flavor #{vm.flavor}
-										td.vm_tenant #{vm.tenant}
-										td.vm_status #{vm.status}
-										td
-											a(href="/dashboard/vm/action?id=#{vm.id}&action=getConsole", target="_blank")
-												img(src="/dashboard/image/vnc.png", alt="vnc", style="width:30px")
+							//- thead
+							//- 	tr 
+							//- 		th ID
+							//- 		th 名字
+							//- 		th IP地址
+							//- 		th 计算节点
+							//- 		th 所属者
+							//- 		th 额度
+							//- 		th 租户
+							//- 		th 状态
+							//- 		th VNC
+							//- tbody
+							//- 	each vm in vmList
+							//- 		tr
+							//- 			td.vm_id #{vm.id}
+							//- 			td.vm_name #{vm.name}
+							//- 			td.vm_ip #{vm.ip}
+							//- 			td.vm_host #{vm.host}
+							//- 			td.vm_owner #{vm.owner}
+							//- 			td.vm_flavor #{vm.flavor}
+							//- 			td.vm_tenant #{vm.tenant}
+							//- 			td.vm_status #{vm.status}
+							//- 			td
+							//- 				a(href="/dashboard/vm/action?id=#{vm.id}&action=getConsole", target="_blank")
+							//- 					img(src="/dashboard/image/vnc.png", alt="vnc", style="width:30px")
 	div.modal.hide.fade#modal_resize
 		div.modal-header
 			h3 选择resize后的额度
@@ -116,7 +120,8 @@ block content
 		div.modal-footer
 			button.btn.yellow#resizeOK 确定
 			button.btn(data-dismiss="modal") 取消
-				
+
+	img(src="/dashboard/image/ajax-loader.gif",id="loading-indicator",style="display:none")			
 
 
 block body_static
