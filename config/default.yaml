@@ -20,3 +20,9 @@ action:
   restart: 重启虚拟机
   email: 发送邮件通知
   sms: 发送短信通知
+
+sshTarget:
+  host: 10.109.253.102
+  port: 22
+  username: root
+  password: jaFtKca1

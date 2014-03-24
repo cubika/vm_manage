@@ -1,0 +1,48 @@
+extends layout
+
+block head_static
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/DT_bootstrap.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title Openstack服务监控详情  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/alarm_rule") 已定义的告警规则
+
+				div.row-fluid
+					div.span12
+						table.table.table-striped.table-bordered#rule_table
+							thead
+								tr 
+									th 虚拟机名称
+									th 虚拟机ip
+									th 监控指标
+									th 门限值
+									th 持续时间
+									th 采取动作
+									th 规则创建时间
+							tbody
+								each rule in rules
+									tr
+										td #{rule.alarm_target.name}
+										td #{rule.alarm_target.ip}
+										td #{rule.alarm_key}
+										td #{rule.threshold} #{rule.threshold_unit}
+										td #{rule.time_range} #{rule.time_unit}
+										td #{rule.action}
+										- var d = (new Date(rule.create_time)).Format("yyyy年MM月dd日 hh:mm:ss")
+										td #{d}
+
+block body_static
+	<script type="text/javascript" src="/dashboard/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="/dashboard/js/DT_bootstrap.js"></script>
+	script(type="text/javascript", src="/dashboard/js/alarm_rule.js")

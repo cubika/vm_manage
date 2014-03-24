@@ -1,0 +1,64 @@
+extends layout
+
+block head_static
+	style.
+		.red{
+			color:red;
+		}
+		.blue{
+			color:blue;
+		}
+		.green{
+			color:green;
+		}
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/DT_bootstrap.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title Openstack服务监控详情  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/alarm_history") 告警触发历史
+
+				//- div.row-fluid
+				//- 	div.span12
+				//- 		table.table.table-striped.table-bordered#history_table
+				//- 			thead
+				//- 				tr 
+				//- 					th 告警触发时间
+				//- 					th 告警触发对象
+				//- 					th 告警监控指标
+				//- 					th 告警门限值
+				//- 					th 告警持续时间
+				//- 					th 告警采取动作
+				//- 					th 动作执行结果
+				//- 			tbody
+				//- 				each alarm in alarms
+				//- 					tr
+				//- 						- var d = (new Date(alarm.trigger_time)).Format("yyyy年MM月dd日 hh:mm:ss")
+				//- 						td #{d}
+				//- 						td #{alarm.rule_id.alarm_target.name}
+				//- 						td #{alarm.rule_id.alarm_key}
+				//- 						td #{alarm.rule_id.threshold} #{alarm.rule_id.threshold_unit}
+				//- 						td #{alarm.rule_id.time_range} #{alarm.rule_id.time_unit}
+				//- 						td #{alarm.rule_id.action}
+				//- 						td #{alarm.action_result}
+
+				ul
+					each alarm in alarms
+						- var d = (new Date(alarm.trigger_time)).Format("yyyy年MM月dd日 hh:mm:ss")
+						li <span class="red">#{d}</span>: 虚拟机“<span class="blue">#{alarm.rule_id.alarm_target.name}</span>”的“<span class="green">#{alarm.rule_id.alarm_key}</span>”达到告警条件，采取动作为#{alarm.rule_id.action}，执行结果为#{alarm.action_result}
+										
+
+block body_static
+	<script type="text/javascript" src="/dashboard/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="/dashboard/js/DT_bootstrap.js"></script>
+	script(type="text/javascript", src="/dashboard/js/alarm_history.js")

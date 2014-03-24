@@ -8,6 +8,7 @@ var routes = require('./routes');
 var host = require('./routes/host');
 var image = require('./routes/image');
 var vm = require('./routes/vm');
+var alarm = require('./routes/alarm');
 var path = require('path');
 
 var app = module.exports = express();
@@ -40,6 +41,8 @@ app.get('/vm_manage',vm.manage);
 app.get('/vm_perf',host.vm_perf);
 app.get('/vm/action',vm.action);
 app.get('/vm/load',vm.load);
+app.get('/alarm_rule',alarm.rule);
+app.get('/alarm_history',alarm.history);
 
 if (!module.parent) {
   app.listen(3000);

@@ -3,6 +3,7 @@ var OSAPI = require('../../../utils/OSAPI.js'),
 	async = require('async'),
 	ssh = require('../../../utils/SSH.js'),
 	VM = require('../../../model/vm'),
+	config = require('config'),
 	fs = require('fs');
 
 var admin = OSAPI(),
@@ -10,13 +11,13 @@ var admin = OSAPI(),
 		compute = admin.compute();
 
 var target = {
-  host: '10.109.253.102',
-  port: 22,
-  username: 'root',
-  password: '123456'
+  host: config.sshTarget.host,
+  port: config.sshTarget.port,
+  username: config.sshTarget.username,
+  password: config.sshTarget.password
 };
 
-var services = ["CPU Usage","Load average","Mem Usage","Disk Usage","Disk I/O","Total Processes","Current Users","Network Usage"];
+var services = ["VM CPU Usage","VM Mem Usage","VM Disk IO Usage","VM Net IO Usage"];
 
 //generate Openstack API token
 console.log("start get token ...");
