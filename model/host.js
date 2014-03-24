@@ -1,3 +1,4 @@
+/*物理主机Model*/
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 

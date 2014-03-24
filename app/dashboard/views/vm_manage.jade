@@ -79,37 +79,12 @@ block content
 									i.icon-remove
 									|  解除监控
 					div.btn-group
-						button.btn.green 增加告警
-								
+						button.btn.green#btn_add_rule 增加告警规则					
 
 				div.row-fluid.row-space
 					div.span12
 						table.table.table-striped.table-bordered.table-full-width#vm_table
-							//- thead
-							//- 	tr 
-							//- 		th ID
-							//- 		th 名字
-							//- 		th IP地址
-							//- 		th 计算节点
-							//- 		th 所属者
-							//- 		th 额度
-							//- 		th 租户
-							//- 		th 状态
-							//- 		th VNC
-							//- tbody
-							//- 	each vm in vmList
-							//- 		tr
-							//- 			td.vm_id #{vm.id}
-							//- 			td.vm_name #{vm.name}
-							//- 			td.vm_ip #{vm.ip}
-							//- 			td.vm_host #{vm.host}
-							//- 			td.vm_owner #{vm.owner}
-							//- 			td.vm_flavor #{vm.flavor}
-							//- 			td.vm_tenant #{vm.tenant}
-							//- 			td.vm_status #{vm.status}
-							//- 			td
-							//- 				a(href="/dashboard/vm/action?id=#{vm.id}&action=getConsole", target="_blank")
-							//- 					img(src="/dashboard/image/vnc.png", alt="vnc", style="width:30px")
+
 	div.modal.hide.fade#modal_resize
 		div.modal-header
 			h3 选择resize后的额度
@@ -120,6 +95,43 @@ block content
 		div.modal-footer
 			button.btn.yellow#resizeOK 确定
 			button.btn(data-dismiss="modal") 取消
+
+	div.modal.hide.fade#modal_add_rule
+		form.form-horizontal#rule_form(action="/api/alarm/rules/time_range",method="POST")
+			input#alarm_target(type="hidden",name="alarm_target")
+			div.modal-header
+				h3 新建告警规则
+
+			div.modal-body
+				div.control-group
+					label.control-label 性能指标：
+					div.controls
+						select(name="alarm_key")
+							each service in serviceList
+								option(value="#{service}") #{service}
+				div.control-group
+					label.control-label 设定阈值：
+					div.controls
+						input(name="threshold",type="text",style="width:120px;margin-right:12px;")
+						input.span1(name="threshold_unit",type="text",placeholder="单位",style="width:60px")
+				div.control-group
+					label.control-label 持续时间:
+					div.controls
+						input(name="time_range",type="text",style="width:120px;margin-right:12px;")
+						select(name="time_unit",style="width:75px;")
+							option(value="s") 秒
+							option(value="min") 分钟
+							option(value="h") 小时
+				div.control-group
+					label.control-label 采取动作：
+					div.controls
+						select(name="action")
+							option(value="resize") 调大额度
+							option(value="migrate") 动态迁移
+
+			div.modal-footer
+				button.btn.yellow#add_rule 确定
+				button.btn(data-dismiss="modal") 取消
 
 	img(src="/dashboard/image/ajax-loader.gif",id="loading-indicator",style="display:none")			
 

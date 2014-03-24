@@ -1,8 +1,32 @@
 var Alarm = require('../../../model/alarm');
 var VM = require('../../../model/vm');
 var Host = require('../../../model/host');
+var RuleTr = require('../../../model/ruleTr');
 
 module.exports = function (app) {
+
+	app.post('/alarm/rules/time_range',function(req,res){
+		VM.findOne({id:req.body.alarm_target},function(e,v){
+			req.body.alarm_target=v;
+			var ruleTr = new RuleTr(req.body);
+			ruleTr.save(function(err){
+				if(err){
+					console.log(err);
+					return;
+				}
+				res.json(ruleTr);
+			});
+		});
+	});
+
+
+
+
+
+
+
+
+
 
 	var loadAlarm = function(req,res,next){
 		Alarm.findOne({_id:req.params.id},function(err,alarm){

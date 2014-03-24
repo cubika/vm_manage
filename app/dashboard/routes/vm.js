@@ -2,6 +2,7 @@
 var OSAPI = require('../../../utils/OSAPI.js'),
 	async = require('async'),
 	ssh = require('../../../utils/SSH.js'),
+	VM = require('../../../model/vm'),
 	fs = require('fs');
 
 var admin = OSAPI(),
@@ -14,6 +15,8 @@ var target = {
   username: 'root',
   password: '123456'
 };
+
+var services = ["CPU Usage","Load average","Mem Usage","Disk Usage","Disk I/O","Total Processes","Current Users","Network Usage"];
 
 //generate Openstack API token
 console.log("start get token ...");
@@ -88,6 +91,7 @@ function collect_data (data_ready_callback) {
 
 			vmList.push(vm);
 		});
+		VM.refresh(vmList);
 		console.log("end of collect data...");
 		fs.writeFile('data/vm_data.json',JSON.stringify(vmList),function(err){
 			if(err) console.log(err);
@@ -104,7 +108,7 @@ function collect_data (data_ready_callback) {
 
 exports.manage = function(req,res){
 	compute.getFlavors(function(flavorList){
-		res.render('vm_manage',{flavorList: admin.flavorList});
+		res.render('vm_manage',{flavorList: admin.flavorList, serviceList: services});
 	});
 }
 

@@ -1,14 +1,13 @@
+/*具体的告警事件*/
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
-var Alarm = new Schema({
-	vm: {type:Schema.ObjectId, ref:'VM', required:true},
-	host: {type:Schema.ObjectId, ref:'Host', required:true},
-	create_time: {type: Date, default: Date.now},
-	update_time: {type: Date, default: Date.now},
-	item: {type:String,required:true},
-	threshold: {type:Number,required:true},
-	action: {type:String,required:true}
+var AlarmSchema = new Schema({
+	trigger_time:{type:Date,default:Date.now},
+	rule_id:{type:Schema.ObjectId},
+	action_result:{type:"String",default:""}
 });
 
-module.exports = mongoose.model('Alarm',Alarm);
+var AlarmModel = mongoose.model('Alarm',AlarmSchema);
+
+module.exports=AlarmModel;

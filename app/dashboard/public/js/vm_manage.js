@@ -142,6 +142,9 @@ var Manage = {
             if($("#op_warning").length > 0){
                 $("#op_warning").remove();
             }
+             if($("#op_info").length > 0){
+                $("#op_info").remove();
+            }
         });
         //basic operation
         $("#basic_op_drop a").on('click',function(){
@@ -200,6 +203,27 @@ var Manage = {
 
             }
         });
+        $("#btn_add_rule").on('click',function(){
+            var sel_row = self.getSelectedRow(oTable);
+            if(!sel_row){
+                self.addWarning("你必须从表格中选择一个虚拟机条目");
+            }else{
+                var id = $(sel_row).find("td.vm_id").text();
+                $("#alarm_target").val(id);
+                $("#modal_add_rule").modal("show");
+            }
+        });
+        $("#add_rule").on('click',function(){
+            $("#rule_form").submit(function(e){
+                $.post($(this).attr('action'), $(this).serialize(), function(res){
+                    console.log(res);
+                });
+                $("#modal_add_rule").modal("hide");
+                self.addInfo("告警规则已添加！");
+                $(this)[0].reset();
+                return false; 
+            });
+        });
         oTable.refresh.on('click',function(){
             oTable.fnReloadAjax();
         });
@@ -212,6 +236,10 @@ var Manage = {
     },
     addWarning: function(message){
         $("<div class='row-fluid' id='op_warning'><div class='alert alert-error'><strong>警告！</strong>"+ message +"</div></div>")
+            .insertAfter($("div.page-content .container-fluid .row-fluid:eq(0)"));
+    },
+    addInfo: function(message){
+        $("<div class='row-fluid' id='op_info'><div class='alert alert-success'>"+ message +"</div></div>")
             .insertAfter($("div.page-content .container-fluid .row-fluid:eq(0)"));
     },
     getSelectedRow: function(oTableLocal){
