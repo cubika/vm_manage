@@ -344,7 +344,7 @@ OSAPI.prototype.compute = function(){
 		getFlavors: function(callback){
 			self.sendRequest({
 				method: "GET",
-				path: '/v2/'+self.tenantId+'/flavors',
+				path: '/v2/'+self.tenantId+'/flavors/detail',
 				port: opt.compute_port
 			},function(data){
 				self.flavorList = data.flavors;
@@ -352,7 +352,27 @@ OSAPI.prototype.compute = function(){
 			});
 			return this;
 		},
-		getConsole: function(serverId,callback){
+		createServerOnHost: function(params,callback){
+			self.sendRequest({
+				data: {
+					"server": {
+				        "name": params.name,
+				        "imageRef": params.imageRef,
+				        "flavorRef": params.flavorRef,
+				        "availability_zone": "nova:"+params.host,
+				        "networks": [{
+				        	"uuid": params.network
+				        }]
+				    }
+				},
+				method: "POST",
+				path: '/v2/'+self.tenantId+'/servers/',
+				port: opt.compute_port
+			},function(data){
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},getConsole: function(serverId,callback){
 			self.sendRequest({
 				data: {
 					"os-getVNCConsole": {

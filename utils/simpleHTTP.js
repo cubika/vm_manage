@@ -19,5 +19,5 @@ exports.get = function (url,callback) {
 	    });
 	}).on('error', function(e) {
 	  console.log("http get "+ url +" Error: \n" + e.message);
-	});;
+	});
 }

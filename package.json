@@ -1,5 +1,5 @@
 {
-  "name": "vmManage_v1",
+  "name": "vmManage_v2",
   "version": "0.1.0",
   "description": "a monitor and alert system for virtual machines",
   "main": "app.js",
@@ -18,6 +18,7 @@
     "jade": "~1.0.2",
     "async": "~0.2.9",
     "underscore": "~1.5.2",
-    "ssh2": "~0.2.16"
+    "ssh2": "~0.2.16",
+    "log4js": "~0.6.12"
   }
 }

@@ -1,5 +1,7 @@
-var http = require('../../../utils/common_http'),
-	config = require('config');
+var http = global.utils.simpleHTTP,
+	config = require('config'),
+	log4j = global.utils.log4j,
+	logger = log4j.getLogger("api/monitor");
 
 
 function get_sgroup_services_all(res,servicegroup){
@@ -144,15 +146,50 @@ module.exports = function(app){
 
 	app.get('/monitor/status/perf',function(req,res){
 		http.get(config.nagira.baseUrl+"/_objects/hostgroup/perf-servers",function(data){
-			var info = data.members.split(",");
-			res.json(info);
+			var perfHosts = data.members.split(","), info = {};
+			http.get(config.nagira.baseUrl+"/_status",function(data2){
+				for(var hostname in data2){
+					if(perfHosts.indexOf(hostname) !== -1){
+						switch(data2[hostname].current_state){
+							case "0":
+								info[hostname] = "UP";
+								break;
+							case "1":
+								info[hostname] = "DOWN";
+								break;
+							case "2":
+								info[hostname] = "UNREACHABLE";
+								break;
+						}
+					}
+				}
+				res.json(info);
+			});
 		});
 	});
 
 	app.get('/monitor/status/vm',function(req,res){
 		http.get(config.nagira.baseUrl+"/_objects/hostgroup/vm_instances",function(data){
-			var info = data.members.split(",");
-			res.json(info);
+			var vmHosts = data.members.split(","), info = {};
+			http.get(config.nagira.baseUrl+"/_status",function(data2){
+				for(var hostname in data2){
+					if(vmHosts.indexOf(hostname) !== -1){
+						logger.debug(data2[hostname].current_state);
+						switch(data2[hostname].current_state){
+							case "0":
+								info[hostname] = "UP";
+								break;
+							case "1":
+								info[hostname] = "DOWN";
+								break;
+							case "2":
+								info[hostname] = "UNREACHABLE";
+								break;
+						}
+					}
+				}
+				res.json(info);
+			});
 		});
 	});
 

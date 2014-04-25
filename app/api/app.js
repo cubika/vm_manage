@@ -1,6 +1,5 @@
 var express    = require('express');
 var app = module.exports = express();
-var data = require('./routes/data');
 
 //Middleware
 app.use(app.router);
@@ -13,10 +12,10 @@ app.configure('production', function(){
 });
 
 
-require('./routes/alarm.js')(app);
-require('./routes/host.js')(app);
-require('./routes/monitor.js')(app);
-app.post('/data',data.main);
+require('./routes/alarm')(app);
+require('./routes/host')(app);
+require('./routes/monitor')(app);
+require('./routes/serviceData')(app);
 
 if (!module.parent) {
   app.listen(3000);

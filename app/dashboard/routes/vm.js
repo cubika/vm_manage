@@ -1,113 +1,15 @@
 
-var OSAPI = require('../../../utils/OSAPI.js'),
-	async = require('async'),
-	ssh = require('../../../utils/SSH.js'),
-	VM = require('../../../model/vm'),
-	config = require('config'),
-	fs = require('fs');
-
-var admin = OSAPI(),
-		auth = admin.authorize(),
-		compute = admin.compute();
-
-var target = {
-  host: config.sshTarget.host,
-  port: config.sshTarget.port,
-  username: config.sshTarget.username,
-  password: config.sshTarget.password
-};
+var admin = global.osadmin.admin,
+	compute = global.osadmin.compute,
+	update = global.utils.update,
+	log4j = global.utils.log4j,
+	ssh = global.utils.ssh,
+	logger = log4j.getLogger("dashboard/vm");
 
 var services = ["VM CPU Usage","VM Mem Usage","VM Disk IO Usage","VM Net IO Usage"];
 
-//generate Openstack API token
-console.log("start get token ...");
-auth.genToken(function(){
-	console.log("get token done!");
-});
-
-
-function collect_data (data_ready_callback) {
-	var tenantList,serverList,userList,flavorList,
-	vmList = [];
-
-	async.parallel([
-		function(callback){
-			auth.getTenants(function(){
-				console.log("get tenant list done!");
-				tenantList = admin.tenantList;
-				callback(null);
-			});
-		},function(callback){
-			auth.getAllUsers(function(){
-				console.log("get user list done!");
-				userList = admin.userList;
-				callback(null);
-			});
-		},function(callback){
-			compute.listServers(function(){
-				console.log("get server list done!");
-				serverList = admin.serverList;
-				callback(null);
-			});
-		},function(callback){
-			compute.getFlavors(function(){
-				console.log("get flavor done!");
-				flavorList = admin.flavorList;
-				callback(null);
-			});
-		}
-	],
-	function(err,results){
-		console.log("start to generate vm list...");
-		serverList.forEach(function(server){
-			var vm = {};
-			vm.id = server.id;
-			vm.name = server.name;
-			vm.status = server.status;
-			vm.host = server['OS-EXT-SRV-ATTR:host'];
-			vm.alias = server['OS-EXT-SRV-ATTR:instance_name'];
-			var filterFlavor = flavorList.filter(function(flavor){
-				return flavor.id === server.flavor.id;
-			});
-			vm.flavor = (filterFlavor.length>0) ? filterFlavor[0].name : "";
-			var filterOwner = userList.filter(function(user){
-				return user.id === server.user_id;
-			});
-			vm.owner = (filterOwner.length>0) ? filterOwner[0].name : "";
-			var filterTenant = tenantList.filter(function(tenant){
-				return tenant.id === server.tenant_id;
-			});
-			vm.tenant = (filterTenant.length>0) ? filterTenant[0].name : "";
-			vm.ip = "";
-			for(var net in server.addresses){
-				for(var key in server.addresses[net]){
-					var ip = server.addresses[net][key];
-					if(ip.version == 4){
-						if(vm.ip != "")
-							vm.ip += "|";
-						vm.ip += ip.addr;
-					}
-				}
-			}
-
-			vmList.push(vm);
-		});
-		VM.refresh(vmList);
-		console.log("end of collect data...");
-		fs.writeFile('data/vm_data.json',JSON.stringify(vmList),function(err){
-			if(err) console.log(err);
-			else console.log("vmList saved!");
-		});
-		fs.writeFile('data/server_list.json',JSON.stringify(admin.serverList),function(err){
-			if(err) console.log(err);
-			else console.log("serverList saved!");
-		});
-		if(typeof data_ready_callback === 'function')
-			data_ready_callback(vmList);
-	});
-}
-
 exports.manage = function(req,res){
+
 	compute.getFlavors(function(flavorList){
 		res.render('vm_manage',{flavorList: admin.flavorList, serviceList: services});
 	});
@@ -218,7 +120,9 @@ exports.action = function(req,res){
 }
 
 exports.load = function(req,res){
-	collect_data(function(vmList){
+	logger.debug("loading vm ...");
+	update.collect_data(function(vmList){
+		logger.debug(vmList);
 		res.json({aaData:vmList});
 	});
 }

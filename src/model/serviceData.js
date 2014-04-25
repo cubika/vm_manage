@@ -2,11 +2,11 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
-var Data = new Schema({
+var ServiceDataSchema = new Schema({
 	time:{type:Date},
 	hostname:{type:String},
 	desc:{type:String},
 	state:{type:String}
 });
 
-module.exports = mongoose.model('Data',Data);
+module.exports = mongoose.model('ServiceData',ServiceDataSchema);

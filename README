@@ -1,68 +1,25 @@
 API列表：
 API_PORT=8085
 告警：
-POST:		/alarm/						--->	add()
-PUT:		/alarm/:id 					--->	update(alarm_id)
-DELETE:		/alarm/:id					--->	delete(alarm_id)
-GET:		/alarm/						--->	get(all)
-GET:		/alarm/vm/:id				--->	get(vm_id)
-GET:		/alarm/host/:id 			--->	get(host_id)
-告警历史：		
-POST:		/history/					--->	add()
-GET:		/history/					--->	get(all)
-GET:		/history/warning			--->	get(warning)
-GET:		/history/critical			--->	get(critical)
-GET:		/history/:from/:to			--->	get(time_form,time_to)
-GET:		/history/w/:f/:t 			--->	get(warning,time_from,time_to)
-GET:		/history/c/:f/:t 			--->	get(critical,time_from,time_to)
+POST:		/alarm/rules/time_range			--->	添加一条时间段告警规则
+GET:		/alarm/rules/time_range			--->	获取所有的时间范围告警规则
+GET:		/alarm/rules/time_range/:vmid 	--->	获取在某台虚拟机上定义的告警规则
+GET:		/alarm/history					--->	获取所有告警历史
+GET:		/alarm/history/:from/:to		--->	获取时间范围内的告警历史
 主机：	
-GET:		/host/						--->	get(all)
+GET:		/host/						--->	获取所有的主机
 监控数据：	
-GET:		/monitor/services			--->	get(all_host_services)
-GET:		/monitor/services/:hostid 	--->	get(host_services)
-GET:		/monitor/status				--->	get(all_host_status)
-GET:		/monitor/perf				--->	get(performance_services)
-GET:		/monitor/perf/:hostid 		--->	get(performance_of_hostid)
-GET:		/monitor/openstack			--->	get(openstack_services)
-GET:		/monitor/openstack/:hostid 	--->	get(openstack_service_of_hostid)
-
-MODEL列表：
-主机: host{
-	name:			主机名字
-	os:				操作系统
-	cpu:			cpu详细参数
-	mem:			内存详细参数
-	disk:			磁盘详细参数
-	eth0:			第一块网卡ip
-	eth1:			第二块网卡ip
-}
-虚拟机：vm{
-	id:				openstack vm UUID
-	name:			名字
-	ip:				ip地址
-	host:			所在计算节点
-	owner:			所属者
-	tenant:			租户
-	status:			状态
-	flavor:			额度
-	instance_name:	libvirt中实例名字
-
-}
-告警: alarm{
-	vm:				虚拟机
-	host:			虚拟机所在主机
-	create_time:	创建时间
-	update_time:	更新时间
-	item:			告警指标
-	threshold:		告警阈值
-	action:			采取动作			
-}
-历史：history{
-	level:			级别
-	vm:				告警来自哪一个虚拟机
-	trigger_time:	触发时间
-	info:			详细信息
-}
+GET:		/monitor/services			--->	获取所有的服务
+GET:		/monitor/services/:hostid 	--->	获取某个主机上的服务
+GET:		/monitor/status/all			--->	获取所有主机的状态
+GET:		/monitor/status/perf		--->	获取perf-server主机组的状态
+GET:		/monitor/status/vmid		--->	获取vm_server主机组的状态
+GET:		/monitor/perf				--->	获取perf服务组的所有服务
+GET:		/monitor/perf/:hostid 		--->	获取perf服务组上指定主机上的所有服务
+GET:		/monitor/openstack			--->	获取openstack服务组的所有服务
+GET:		/monitor/openstack/:hostid 	--->	获取openstack服务组上指定主机上的所有服务
 
 导入数据命令语法：
 mongoimport -h localhost -d monitor -c host  --type json --file data/host.json --jsonArray
+
+程序层次结构：

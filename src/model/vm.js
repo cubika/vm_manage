@@ -2,6 +2,14 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
+var FlavorObj = {
+	id: String,
+	name: String,
+	vcpus: Number,
+	ram: Number,
+	disk: Number
+};
+
 var VMSchema = new Schema({
 	id: String,
 	name: String,
@@ -10,23 +18,14 @@ var VMSchema = new Schema({
 	owner: String,	
 	tenant: String,	
 	status:	String,
-	flavor:	String,
+	flavor:	FlavorObj,
 	alias: String	
 });
 
+var VMModel = mongoose.model('VM',VMSchema);
+
+//刷新虚拟机信息，如果没有则添加，如果有则更新
 VMSchema.statics.refresh = function(vmList){
-	// VMModel.remove({},function(err){
-	// 	if(err){
-	// 		console.log(err);
-	// 		return;
-	// 	}
-	// 	vmList.forEach(function(vm){
-	// 		var newVM = new VMModel(vm);
-	// 		newVM.save(function(saveErr){
-	// 			if(saveErr) console.log(saveErr);
-	// 		});
-	// 	});
-	// });
 	//http://stackoverflow.com/questions/7267102/how-do-i-update-upsert-a-document-in-mongoose
 	vmList.forEach(function(vm){
 		VMModel.findOne({id:vm.id},function(err,v){
@@ -39,7 +38,5 @@ VMSchema.statics.refresh = function(vmList){
 		});
 	});
 }
-
-var VMModel = mongoose.model('VM',VMSchema);
 
 module.exports = VMModel;

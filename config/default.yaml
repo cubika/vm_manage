@@ -1,6 +1,6 @@
 mongodb:
   server:   localhost
-  database:    monitor
+  database:    monitor2
   connectionString:       # alternative to setting server, database, user and password separately
 
 server:
@@ -26,3 +26,6 @@ sshTarget:
   port: 22
   username: root
   password: jaFtKca1
+
+update:
+  interval: 60

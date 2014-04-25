@@ -88,7 +88,7 @@ var Manage = {
                 {"sTitle":"IP地址", "sClass":"vm_ip", "mData":"ip"},
                 {"sTitle":"计算节点", "sClass":"vm_host", "mData":"host"},
                 {"sTitle":"所属者", "sClass":"vm_owner", "mData":"owner"},
-                {"sTitle":"额度", "sClass":"vm_flavor", "mData":"flavor"},
+                // {"sTitle":"额度", "sClass":"vm_flavor", "mData":"flavor"},
                 {"sTitle":"租户", "sClass":"vm_tenant", "mData":"tenant"},
                 {"sTitle":"状态", "sClass":"vm_status", "mData":"status"},
                 {"sTitle":"VNC", "mData":null,"bSortable": false,"mRender": function ( data, type, full ) {

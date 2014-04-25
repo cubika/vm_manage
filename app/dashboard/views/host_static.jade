@@ -24,24 +24,25 @@ block content
 						if index != 0
 							| </div>
 						| <div class='row-fluid'>
-						- var lowerStatus = host.status.toLowerCase()
+						- var status = (host.reachable ? "UP" : "DOWN")
+						- var lowerStatus = status.toLowerCase()
 						div.span4.pricing.hover-effect(class="#{lowerStatus}")
 							div.pricing-head
 								h3 #{host.name}
-								h4 #{host.status}
+								h4 #{status}
 							ul.pricing-content.unstyled
 								li  
 									span.host_item   操作系统： 
 									small #{host.os}
 								li  
 									span.host_item   CPU：  
-									small #{host.cpu}
+									small #{host.cpuInfo} #{host.cpuCores}
 								li 
 									span.host_item   内存：  
-									small #{host.mem}
+									small #{host.usedMem} / #{host.totalMem} #{host.memUnit}
 								li  
 									span.host_item   磁盘:  
-									small #{host.disk}
+									small #{host.diskInfo}
 								li  
 									span.host_item   eth0:  
 									small #{host.eth0}
@@ -49,24 +50,25 @@ block content
 									span.host_item   eth1:
 									small #{host.eth1}
 					else
-						- var lowerStatus = host.status.toLowerCase()
+						- var status = (host.reachable ? "UP" : "DOWN")
+						- var lowerStatus = status.toLowerCase()
 						div.span4.pricing.hover-effect(class="#{lowerStatus}")
 							div.pricing-head
 								h3 #{host.name}
-								h4 #{host.status}
+								h4 #{status}
 							ul.pricing-content.unstyled
 								li  
 									span.host_item   操作系统： 
 									small #{host.os}
 								li  
 									span.host_item   CPU：  
-									small #{host.cpu}
+									small #{host.cpuInfo} #{host.cpuCores}
 								li 
 									span.host_item   内存：  
-									small #{host.mem}
+									small #{host.usedMem} / #{host.totalMem} #{host.memUnit}
 								li  
 									span.host_item   磁盘:  
-									small #{host.disk}
+									small #{host.diskInfo}
 								li  
 									span.host_item   eth0:  
 									small #{host.eth0}

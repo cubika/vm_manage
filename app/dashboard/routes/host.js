@@ -1,35 +1,39 @@
-var http = require('../../../utils/common_http'),
-	Host = require('../../../model/host'),
+var http = global.utils.simpleHTTP,
+	Host = global.model.Host,
+	resourcePool = global.resourcePool,
 	config = require('config'),
 	async = require('async');
 
-require('../../../utils/extend');
-
 exports.host_static = function(req,res,next){
-	async.parallel({
-		host: function(callback){
-			Host.find({},function(err,hosts){
-				if(err) return next(err);
-				callback(null,hosts);
-			});
-		},
-		status: function(callback){
-			http.get('http://localhost:'+config.server.port+'/api/monitor/status/all',function(response){
-				callback(null,response);
-			});
-		}
-	},function(err,results){
-		for(var i = 0;i < results.host.length; i++){
-			results.host[i]['status'] = results.status[results.host[i].name];
-			//results.host[i]['status'] = ['UP','DOWN','UNREACHABLE'][Math.round(Math.random()*100)%3];
-		}
-		res.render('host_static',{hosts: results.host});
-	});
+
+	logger.debug(resourcePool.hostList);
+	res.render('host_static',{hosts : resourcePool.hostList});
+
+	// async.parallel({
+	// 	host: function(callback){
+	// 		Host.find({},function(err,hosts){
+	// 			if(err) return next(err);
+	// 			callback(null,hosts);
+	// 		});
+	// 	},
+	// 	//TODO: 将status的更新改为实时从消息队列中获取
+	// 	status: function(callback){
+	// 		http.get('http://localhost:'+config.server.port+'/api/monitor/status/all',function(response){
+	// 			callback(null,response);
+	// 		});
+	// 	}
+	// },function(err,results){
+	// 	for(var i = 0;i < results.host.length; i++){
+	// 		results.host[i]['status'] = results.status[results.host[i].name];
+	// 		//results.host[i]['status'] = ['UP','DOWN','UNREACHABLE'][Math.round(Math.random()*100)%3];
+	// 	}
+	// 	res.render('host_static',{hosts: results.host});
+	// });
 }
 
 function render(req,res,type){
 	http.get('http://localhost:'+config.server.port+'/api/monitor/status/'+type,function(response){
-			var hosts = response;
+			var hosts = Object.keys(response);
 			var current_host = (req.query.host) ? (req.query.host) : hosts[0];
 			var span = (req.query.span) ? (req.query.span) : "4hour";
 			http.get(config.pnp.apiUrl+'/host_'+span+'/'+current_host,function(data){
