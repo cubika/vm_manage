@@ -4,6 +4,7 @@ var admin = global.osadmin.admin,
 	update = global.utils.update,
 	log4j = global.utils.log4j,
 	ssh = global.utils.ssh,
+	target = global.sshTarget,
 	logger = log4j.getLogger("dashboard/vm");
 
 var services = ["VM CPU Usage","VM Mem Usage","VM Disk IO Usage","VM Net IO Usage"];

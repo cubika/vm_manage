@@ -72,7 +72,7 @@ global.strategy = {
 };
 
 var Host = global.model.Host;
-Host.find({},function(err,hosts){
+Host.find({name:/^compute/i},function(err,hosts){
 	if(err){
 		logger.error(err);
 		return;
@@ -82,7 +82,6 @@ Host.find({},function(err,hosts){
 		global.resourcePool.addHost(host);
 	}
 });
-
 
 /**
  * 定时同步数据

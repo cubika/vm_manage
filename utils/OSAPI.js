@@ -9,12 +9,12 @@ var http = require('http'),
 
 
 var defaults = {
-	host: '10.109.253.102',
+	host: '10.109.253.106',
 	identity_port: 35357,//管理端口
 	compute_port: 8774,
 	//monitor_port: 8989,//晓江学长开发
 	username: 'admin',
-	password: 'password',
+	password: '123456',
 	tenant: 'admin'
 };
 

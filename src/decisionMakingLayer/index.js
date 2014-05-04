@@ -32,9 +32,9 @@ exports.apply = function(params){
 }
 
 //调整资源，由于虚拟机过载引起
-exports.adjust = function(overloadVM){
+exports.adjust = function(overloadVM,callback){
 	//直接调大额度
-	executeLayer.scaleUp(overloadVM);
+	executeLayer.scaleUp(overloadVM,callback);
 }
 
 //高可用性，由于主机宕机引起

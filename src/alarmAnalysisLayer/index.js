@@ -2,8 +2,8 @@
 
 var RuleTr = global.model.RuleTr,
 	Data = global.model.serviceData,
-	Alarm = global.model.alarm,
-	decisionMaking = global.layer.decisionMakingLayer,
+	Alarm = global.model.Alarm,
+	decisionMaking = global.layer.decisionMaking,
 	log4j = global.utils.log4j,
 	logger = log4j.getLogger("alarmAnlysis");
 
@@ -64,17 +64,23 @@ function matchTimeRangeRule(data){
 						alarm_count++;
 					}
 				});
-				logger.debug("alarm_count is :"+alarm_count+" and total_count is :"+total_count);
+				logger.info("alarm_count is :"+alarm_count+" and total_count is :"+total_count);
 				if(alarm_count==0) return false;
 				//step5:计算比率，看是否满足告警条件
 				if(alarm_count/total_count>=0.8){
 					//step6:生成新的告警，并保存告警信息
 					var alarm = new Alarm();
 					alarm.rule_id=ruleTr;
-					alarm.save();
+					// alarm.save();
 					//step7: 调用决策层调大
 					var vm = ruleTr.alarm_target;
-					decisionMakingLayer.adjust(vm);
+					decisionMaking.adjust(vm,function(msg){
+						alarm.action_result = msg;
+						logger.info("msg:" + msg);
+						alarm.save();
+					});
+					//step8: 删除历史数据，避免被重复使用
+					Data.find({hostname:data.hostname,desc:data.desc}).remove();
 					return true;
 				}
 				else

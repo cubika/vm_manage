@@ -101,6 +101,7 @@ var collect_data = exports.collect_data = function(data_ready_callback) {
 		});
 		if(typeof data_ready_callback === 'function')
 			data_ready_callback(vmList);
+
 	});
 }
 

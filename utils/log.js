@@ -6,7 +6,7 @@
 
 var log4js = require('log4js');
 var levels = ["INFO","DEBUG","ERROR"]
-var level = "DEBUG";
+var level = "INFO";
 var events = require('events')
 var dynamicLogging = new events.EventEmitter()
 var u = require("util")
