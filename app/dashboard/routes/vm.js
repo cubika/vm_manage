@@ -1,10 +1,12 @@
 
 var admin = global.osadmin.admin,
 	compute = global.osadmin.compute,
+	blockStorage = global.osadmin.blockStorage,
 	update = global.utils.update,
 	log4j = global.utils.log4j,
 	ssh = global.utils.ssh,
 	target = global.sshTarget,
+	EventProxy = require('eventproxy'),
 	logger = log4j.getLogger("dashboard/vm");
 
 var services = ["VM CPU Usage","VM Mem Usage","VM Disk IO Usage","VM Net IO Usage"];
@@ -14,6 +16,41 @@ exports.manage = function(req,res){
 	compute.getFlavors(function(flavorList){
 		res.render('vm_manage',{flavorList: admin.flavorList, serviceList: services});
 	});
+}
+
+exports.new_instance = function(req,res) {
+	var proxy = new EventProxy();
+	proxy.all('flavors','images','snapshots','keypairs','networks',function(flavors,images,snapshots,keypairs,networks){
+		var data = {
+			flavors: flavors,
+			images: images,
+			snapshots: snapshots,
+			keypairs: keypairs,
+			networks: networks
+		};
+		logger.info(data);
+		res.render('new_instance',data);
+	});
+	compute.getFlavors(function(data){
+		logger.debug('get flavors done' + data.flavors[0]);
+		proxy.emit('flavors',data.flavors);
+	});
+	compute.getImages(function(data){
+		logger.debug('get images done' + data.images[0]);
+		proxy.emit('images',data.images);
+	});
+	compute.getNetworks(function(data){
+		logger.debug('get networks done' + data.networks[0]);
+		proxy.emit('networks',data.networks);
+	});
+	compute.getKeyPairs(function(data){
+		logger.debug('get keypairs done' + data.keypairs[0]);
+		proxy.emit('keypairs',data.keypairs);
+	});
+	blockStorage.getSnapshots(function(data){
+		logger.debug('get snapshots done' + data.snapshots[0]);
+		proxy.emit('snapshots',data.snapshots);
+	})
 }
 
 exports.action = function(req,res){

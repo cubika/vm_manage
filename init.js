@@ -33,12 +33,14 @@ global.sshTarget = {
  */
 var admin = osapi(),
 	auth = admin.authorize(),
-	compute = admin.compute();
+	compute = admin.compute(),
+	blockStorage = admin.blockStorage();
 
 global.osadmin = {
 	admin: admin,
 	auth: auth,
-	compute: compute
+	compute: compute,
+	blockStorage: blockStorage
 }
 
 //认证一下

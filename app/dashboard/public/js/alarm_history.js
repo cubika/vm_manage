@@ -4,3 +4,5 @@ var History = {
 	}
 }
 History.init();
+$("ul.page-sidebar-menu li.active").removeClass('active');
+$("ul.page-sidebar-menu li.alarm").addClass('active');

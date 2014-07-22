@@ -43,7 +43,7 @@ html
 								i.icon-home
 								span.title Dashboard
 								span.selected
-						li
+						li.host
 							a(href="javascript:;")
 								i.icon-desktop
 								span.title 物理主机
@@ -53,7 +53,7 @@ html
 									a(href="/dashboard/host_static") 服务器配置详情
 									a(href="/dashboard/host_perf") 性能监控详情
 									a(href="/dashboard/host_osservice") openstack服务监控
-						li
+						li.vm
 							a(href="javascript:;")
 								i.icon-cloud
 								span.title 虚拟机
@@ -62,7 +62,8 @@ html
 								li
 									a(href="/dashboard/vm_manage") 查看详情和操作管理
 									a(href="/dashboard/vm_perf") 性能监控详情
-						li
+									a(href="/dashboard/new_instance") 创建虚拟机实例
+						li.alarm
 							a(href="javascript:;")
 								i.icon-bolt
 								span.title 告警
@@ -71,7 +72,7 @@ html
 								li
 									a(href="/dashboard/alarm_rule") 已定义告警
 									a(href="/dashboard/alarm_history") 告警触发记录
-						li
+						li.config
 							a(href="javascript:;")
 								i.icon-cog
 								span.title 配置

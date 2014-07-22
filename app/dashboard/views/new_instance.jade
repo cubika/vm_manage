@@ -1,0 +1,79 @@
+extends layout
+
+block head_static
+	link(rel="stylesheet", type="text/css", href="/dashboard/css/pricing-tables.css")
+
+block content
+	div.page-container
+		div.page-content
+			div.container-fluid
+				div.row-fluid
+					div.span12
+						h3.page-title 创建新的虚拟机  
+						ul.breadcrumb
+							li
+								i.icon-home
+								a(href="/dashboard")  Home
+								i.icon-angle-right
+							li
+								a(href="/dashboard/new_instance") 新建虚拟机
+
+				div.row-fluid
+					div.span12
+						form.form-horizontal(id="", method="POST", action="")
+							div.control-group
+								label.control-label 名称：
+								div.controls
+									input.m-wrap.medium(type="text")
+									span.help-inline
+
+							div.control-group
+								label.control-label 配额：
+								div.controls
+									select.m-wrap.medium
+									each flavor in flavors
+										option
+									span.help-inline
+
+							div.control-group
+								label.control-label 启动源类型:
+								div.controls
+									label.radio
+										input(type="radio",name="launchSource",value="image",checked)
+										| 镜像
+									label.radio
+										input(type="radio",name="launchSource",value="snapshot")
+										| 快照
+
+							div.control-group
+								label.control-label 启动源：
+								div.controls
+									select.m-wrap.medium#image_select
+									each image in images
+										option(value="#{image.id}") #{image.name}
+									select.m-wrap.medium#snapshot_select
+									each snapshot in snapshots
+										option(value="#{snapshot.id}") #{snapshot.name}
+									span.help-inline
+
+							div.control-group
+								label.control-label keypair:
+								div.controls
+									select.m-wrap.medium
+									each keypair in keypairs
+										option(value="#{keypair.keypair.name}") #{keypair.keypair.name}
+									span.help-inline
+
+							div.control-group
+								label.control-label 网络：
+								div.controls
+									select.m-wrap.medium
+									each network in networks
+										option(value="#{network.id}") #{network.label}
+									span.help-inline
+
+								
+							div.form-actions
+								button.btn.blue(type="submit")
+									i.icon-ok 确定
+								button.btn(type="button") 取消

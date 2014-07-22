@@ -24,6 +24,9 @@
 		location.reload();
 	},90*1000);
 
+	$("ul.page-sidebar-menu li.active").removeClass('active');
+	$("ul.page-sidebar-menu li.host").addClass('active');
+
 	$("div.graph").imgAreaSelect({ 
 		handles: false, 
 		autoHide: true,

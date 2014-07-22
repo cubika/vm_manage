@@ -5,3 +5,5 @@ $("#select_host").change(function(){
 	$("tbody tr."+sel_host).show();
 	$("tbody tr:not(."+ sel_host +")").hide();
 });
+$("ul.page-sidebar-menu li.active").removeClass('active');
+$("ul.page-sidebar-menu li.host").addClass('active');

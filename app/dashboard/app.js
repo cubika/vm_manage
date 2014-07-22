@@ -41,6 +41,7 @@ app.get('/vm_manage',vm.manage);
 app.get('/vm_perf',host.vm_perf);
 app.get('/vm/action',vm.action);
 app.get('/vm/load',vm.load);
+app.get('/new_instance',vm.new_instance);
 app.get('/alarm_rule',alarm.rule);
 app.get('/alarm_history',alarm.history);
 

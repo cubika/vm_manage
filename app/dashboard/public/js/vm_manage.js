@@ -257,3 +257,5 @@ var Manage = {
 }
 
 Manage.init();
+$("ul.page-sidebar-menu li.active").removeClass('active');
+$("ul.page-sidebar-menu li.vm").addClass('active');

@@ -12,6 +12,7 @@ var defaults = {
 	host: '10.109.253.106',
 	identity_port: 35357,//管理端口
 	compute_port: 8774,
+	block_storage_port: 8776,
 	//monitor_port: 8989,//晓江学长开发
 	username: 'admin',
 	password: '123456',
@@ -20,7 +21,6 @@ var defaults = {
 
 function OSAPI (options) {
 	this.options = _.extend({},defaults,options);
-	this.token = this.tenantId = this.limits = this.servers = this.flavors = null;
 }
 
 //认证部分
@@ -352,6 +352,39 @@ OSAPI.prototype.compute = function(){
 			});
 			return this;
 		},
+		getImages: function(callback){
+			self.sendRequest({
+				method: "GET",
+				path: '/v2/images/detail',
+				port: opt.compute_port
+			},function(data){
+				self.imageList = data.images;
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
+		getNetworks: function(callback){
+			self.sendRequest({
+				method: "GET",
+				path: '/v2/'+self.tenantId+'/os-networks',
+				port: opt.compute_port
+			},function(data){
+				self.networkList = data.networks;
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
+		getKeyPairs: function(callback){
+			self.sendRequest({
+				method: "GET",
+				path: '/v2/'+self.tenantId+'/os-keypairs',
+				port: opt.compute_port
+			},function(data){
+				self.keypairList = data.keypairs;
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		},
 		createServerOnHost: function(params,callback){
 			self.sendRequest({
 				data: {
@@ -392,6 +425,23 @@ OSAPI.prototype.compute = function(){
 
 	return obj;
 };
+
+OSAPI.prototype.blockStorage = function(){
+	var self = this, opt = self.options;
+	return {
+		getSnapshots: function(callback){
+			self.sendRequest({
+				method: "GET",
+				path: '/v2/'+self.tenantId+'/snapshots',
+				port: opt.block_storage_port
+			},function(data){
+				self.networkList = data.snapshots;
+				OSAPI.utils.cb(callback,data);
+			});
+			return this;
+		}
+	}
+}
 
 // //获取资源监控情况
 // OSAPI.prototype.monitor = function(){
